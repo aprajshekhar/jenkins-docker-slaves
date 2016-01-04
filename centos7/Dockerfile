@@ -41,9 +41,10 @@ VOLUME /var/lib/docker
 
 # Make sure that the "root" user from evarga's image is part of the "docker"
 # group. Needed to access the docker daemon's unix socket.
-RUN usermod -a -G docker root
+# RUN usermod -a -G docker root
 
 
 # place the jenkins slave startup script into the container
-ADD jenkins-slave-startup.sh /
-CMD ["/jenkins-slave-startup.sh"]
+ADD jenkins-slave-startup.sh /root/
+RUN chmod +x /root/jenkins-slave-startup.sh
+CMD ["/root/jenkins-slave-startup.sh"]
