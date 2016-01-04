@@ -7,6 +7,8 @@ RUN yum -y update && yum clean all
 # Setup ssh
 RUN yum install -y openssh-server
 RUN mkdir -p /var/run/sshd
+RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
 # Install JDK 7
 RUN yum install -y  java-1.7.0-openjdk
@@ -16,6 +18,7 @@ RUN yum install -y  git maven python
 
 # Install docker
 RUN yum -y install docker docker-registry
+
 
 
 # Add user jenkins to the image
