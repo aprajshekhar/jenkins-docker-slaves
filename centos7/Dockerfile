@@ -1,4 +1,8 @@
-FROM centos:7
+# This dockerfile is based on tehranian/dind-jenkins-slave. The tehranian/dind-jenkins-slave uses Ubuntu as
+# base system. This attempt is to migrate it to centos base image
+
+
+FROM centos:latest
 MAINTAINER A.P. Rajshekhar
 
 # Update the system
@@ -27,6 +31,19 @@ RUN yum -y install docker docker-registry
 RUN echo "root:jenkins" | chpasswd
 
 # Standard SSH port
-EXPOSE 22 
+# EXPOSE 22 
 
-CMD ["/usr/sbin/sshd", "-D"]
+# CMD ["/usr/sbin/sshd", "-D"]
+ADD wrapdocker /usr/local/bin/wrapdocker
+RUN chmod +x /usr/local/bin/wrapdocker
+VOLUME /var/lib/docker
+
+
+# Make sure that the "root" user from evarga's image is part of the "docker"
+# group. Needed to access the docker daemon's unix socket.
+RUN usermod -a -G docker root
+
+
+# place the jenkins slave startup script into the container
+ADD jenkins-slave-startup.sh /
+CMD ["/jenkins-slave-startup.sh"]
