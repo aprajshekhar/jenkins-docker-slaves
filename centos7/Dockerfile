@@ -9,13 +9,13 @@ RUN yum install -y openssh-server
 RUN mkdir -p /var/run/sshd
 
 #Install JDK 7
-RUN yum install -y  openjdk-7-jdk
+RUN yum install -y  java-1.7.0-openjdk
 
 # Install packages needed for the build
 RUN yum install -y  git maven python
 
 # Add user jenkins to the image
-RUN adduser --quiet root
+# RUN adduser  root
 # Set password for the jenkins user (you may want to alter this).
 RUN echo "root:jenkins" | chpasswd
 
