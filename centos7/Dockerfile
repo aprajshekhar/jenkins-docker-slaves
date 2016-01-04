@@ -34,7 +34,7 @@ RUN echo "root:jenkins" | chpasswd
 # EXPOSE 22 
 
 # CMD ["/usr/sbin/sshd", "-D"]
-ADD wrapdocker /usr/local/bin/wrapdocker
+ADD docker-wrap.sh /usr/local/bin/wrapdocker
 RUN chmod +x /usr/local/bin/wrapdocker
 VOLUME /var/lib/docker
 
