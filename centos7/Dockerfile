@@ -15,7 +15,7 @@ RUN yum install -y  java-1.7.0-openjdk
 RUN yum install -y  git maven python
 
 # Install docker
-yum -y install docker docker-registry
+RUN yum -y install docker docker-registry
 
 
 # Add user jenkins to the image
