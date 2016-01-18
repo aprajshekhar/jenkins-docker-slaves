@@ -34,17 +34,16 @@ RUN echo "root:jenkins" | chpasswd
 # EXPOSE 22 
 
 # CMD ["/usr/sbin/sshd", "-D"]
-ADD docker-wrap.sh /usr/local/bin/wrapdocker
-RUN chmod +x /usr/local/bin/wrapdocker
-VOLUME /var/lib/docker
 
 
-# Make sure that the "root" user from evarga's image is part of the "docker"
-# group. Needed to access the docker daemon's unix socket.
-# RUN usermod -a -G docker root
+ENV DOCKER_BUCKET get.docker.com
+ENV DOCKER_VERSION 1.8.3
+ENV DOCKER_SHA256 f024bc65c45a3778cf07213d26016075e8172de8f6e4b5702bedde06c241650f
 
+RUN curl -fSL "https://${DOCKER_BUCKET}/builds/Linux/x86_64/docker-$DOCKER_VERSION" -o /usr/local/bin/docker \
+	&& echo "${DOCKER_SHA256}  /usr/local/bin/docker" | sha256sum -c - \
+	&& chmod +x /usr/local/bin/docker
 
-# place the jenkins slave startup script into the container
-ADD jenkins-slave-startup.sh /root/
-RUN chmod +x /root/jenkins-slave-startup.sh
+COPY docker-entrypoint.sh /usr/local/bin/
+
 CMD ["/root/jenkins-slave-startup.sh"]
